@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete agronomic guide to tomato leaf disease pathology, diagnostic symptoms, organic remedies, and chemical fungicides.">
+    <title>Disease Details — AgroDoc</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <!-- AgroDoc Main Design System -->
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+    <!-- ====================================================================
+         NAVBAR (Universal / Dual-state)
+         ==================================================================== -->
+    <nav class="agrodoc-nav" id="main-nav" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand" aria-label="AgroDoc Home">
+                <div class="nav-brand-icon" aria-hidden="true">🌿</div>
+                <span class="nav-brand-name">AgroDoc</span>
+            </a>
+
+            <ul class="nav-links" id="nav-links-list" role="list">
+                <li><a href="index.html" class="nav-link" id="nav-home">Home</a></li>
+                <li><a href="dashboard.html" class="nav-link" id="nav-dashboard">Dashboard</a></li>
+                <li><a href="scan.html" class="nav-link" id="nav-scan">New Scan</a></li>
+                <li><a href="library.html" class="nav-link active" id="nav-library">Library</a></li>
+                <li><a href="history.html" class="nav-link" id="nav-history">History</a></li>
+            </ul>
+
+            <!-- Dynamic Nav Actions (Authenticated vs Guest) -->
+            <div class="nav-actions" id="nav-actions-auth" style="display: none;">
+                <div class="nav-user-chip" id="nav-user-chip">
+                    <div class="nav-avatar" id="nav-user-avatar" aria-hidden="true">?</div>
+                    <span id="nav-user-name" class="nav-user-label">Loading…</span>
+                </div>
+                <button class="btn btn-ghost btn-sm" id="btn-logout">
+                    <i data-lucide="log-out" aria-hidden="true"></i>
+                    Logout
+                </button>
+            </div>
+
+            <div class="nav-actions" id="nav-actions-guest">
+                <a href="login.html" class="btn btn-ghost btn-sm" id="btn-nav-login">Log In</a>
+                <a href="register.html" class="btn btn-primary btn-sm" id="btn-nav-register">Get Started</a>
+            </div>
+
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle mobile menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ====================================================================
+         MAIN CONTENT — DISEASE DETAIL SHELL
+         ==================================================================== -->
+    <main class="main-content" id="main">
+        <div class="container py-5">
+
+            <!-- Breadcrumb Navigation -->
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <nav aria-label="Breadcrumb">
+                    <ol class="d-flex gap-2 text-sm text-muted">
+                        <li><a href="index.html" class="text-muted">Home</a></li>
+                        <li><span class="mx-1">/</span></li>
+                        <li><a href="library.html" class="text-muted">Library</a></li>
+                        <li><span class="mx-1">/</span></li>
+                        <li class="text-primary text-semibold" aria-current="page" id="breadcrumb-disease-name">Early Blight</li>
+                    </ol>
+                </nav>
+                <a href="library.html" class="btn btn-ghost btn-sm">
+                    <i data-lucide="arrow-left" aria-hidden="true"></i>
+                    Back to Library
+                </a>
+            </div>
+
+            <!-- Disease Header Card -->
+            <div class="card mb-6">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap justify-content-between align-items-start gap-4">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="badge badge-neutral" id="disease-type-badge">Fungal Pathogen</span>
+                                <span class="badge badge-severity-high" id="disease-severity-badge">High Severity</span>
+                            </div>
+                            <h1 class="section-title text-3xl" id="disease-title">Early Blight</h1>
+                            <p class="text-muted text-lg fst-italic mt-1" id="disease-scientific-title">Alternaria solani</p>
+                        </div>
+                        <div>
+                            <a href="scan.html" class="btn btn-primary">
+                                <i data-lucide="camera" aria-hidden="true"></i>
+                                Verify with AI Scan
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Quick Facts Grid -->
+                    <div class="grid-4 mt-4 pt-4 border-top">
+                        <div>
+                            <span class="d-block text-xs text-muted">Pathogen Family</span>
+                            <strong class="text-sm text-primary" id="fact-pathogen">Pleosporaceae</strong>
+                        </div>
+                        <div>
+                            <span class="d-block text-xs text-muted">Primary Host</span>
+                            <strong class="text-sm text-primary" id="fact-host">Tomato (Solanum lycopersicum)</strong>
+                        </div>
+                        <div>
+                            <span class="d-block text-xs text-muted">Favorable Temp</span>
+                            <strong class="text-sm text-primary" id="fact-temp">24°C – 29°C (Warm & Humid)</strong>
+                        </div>
+                        <div>
+                            <span class="d-block text-xs text-muted">Transmission</span>
+                            <strong class="text-sm text-primary" id="fact-vector">Wind, Rain Splash, Tools</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="grid-3 mb-6">
+
+                <!-- Left Column (Span 2): Pathology, Symptoms, Remedies -->
+                <div style="grid-column: span 2;" class="d-flex flex-column gap-6">
+
+                    <!-- Overview Section -->
+                    <section class="card">
+                        <div class="card-header">
+                            <h2 class="text-sm text-semibold text-primary mb-0">Pathology & Disease Overview</h2>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-secondary text-sm mb-3" id="disease-desc">
+                                Early blight is one of the most destructive and widespread diseases of tomatoes worldwide. Caused by the necrotrophic fungus <em>Alternaria solani</em>, the disease targets foliar tissue, stems, and fruit. Under warm, wet conditions, infections can cause total premature defoliation, leaving tomatoes susceptible to sunscald and substantially diminishing marketable harvest yields.
+                            </p>
+                            <p class="text-secondary text-sm mb-0">
+                                Overwintering occurs in infected crop residue, solanaceous weeds (such as black nightshade), and volunteer tomato plants. Fungal spores (conidia) are readily transported by wind currents, rain splash, and mechanical farm implements.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Symptoms Section -->
+                    <section class="card">
+                        <div class="card-header">
+                            <h2 class="text-sm text-semibold text-primary mb-0">Diagnostic Symptoms</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex flex-column gap-3" id="symptoms-container">
+                                <div class="d-flex gap-3 align-items-start">
+                                    <span class="badge badge-warning" style="margin-top: 2px;"><i data-lucide="alert-circle" aria-hidden="true"></i></span>
+                                    <div>
+                                        <strong class="d-block text-sm">Foliar Target Spotting</strong>
+                                        <p class="text-xs text-muted mb-0">Older leaves nearest to the ground display irregular brown-to-black necrotic spots. Concentric rings develop within the spots creating a target-board pattern, often bordered by a chlorotic yellow halo.</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-3 align-items-start">
+                                    <span class="badge badge-warning" style="margin-top: 2px;"><i data-lucide="alert-circle" aria-hidden="true"></i></span>
+                                    <div>
+                                        <strong class="d-block text-sm">Stem Collar Rot</strong>
+                                        <p class="text-xs text-muted mb-0">Dark, sunken, elongated cankers form along seedling stems near the soil level, frequently causing girdling and plant collapse in younger transplants.</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-3 align-items-start">
+                                    <span class="badge badge-warning" style="margin-top: 2px;"><i data-lucide="alert-circle" aria-hidden="true"></i></span>
+                                    <div>
+                                        <strong class="d-block text-sm">Stem-End Fruit Rot</strong>
+                                        <p class="text-xs text-muted mb-0">Sunken, dark brown to leathery black lesions emerge at the calyx and stem attachment area, penetrating deep into the tomato fruit flesh.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Treatment & Remedies -->
+                    <section class="card">
+                        <div class="card-header">
+                            <h2 class="text-sm text-semibold text-primary mb-0">Recommended Management & Remedies</h2>
+                        </div>
+                        <div class="card-body">
+                            <!-- Category Tabs -->
+                            <ul class="nav nav-tabs mb-4" id="libraryRemedyTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="lib-organic-tab" data-bs-toggle="tab" data-bs-target="#lib-organic" type="button" role="tab">
+                                        🌱 Organic Solutions
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="lib-chemical-tab" data-bs-toggle="tab" data-bs-target="#lib-chemical" type="button" role="tab">
+                                        🧪 Chemical Controls
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="libRemedyTabContent">
+                                <div class="tab-pane fade show active" id="lib-organic" role="tabpanel">
+                                    <div class="d-flex flex-column gap-3">
+                                        <div class="p-3 bg-subtle rounded border">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <strong class="text-sm text-primary">Liquid Copper Octanoate</strong>
+                                                <span class="badge badge-success">Approved for Organic Farming</span>
+                                            </div>
+                                            <p class="text-xs text-muted mb-2"><strong>Dosage & Method:</strong> 10-15 ml per liter of water. Mist foliage until evenly wet at 7-day intervals starting prior to symptom outbreak.</p>
+                                            <p class="text-xs text-secondary mb-0"><strong>Effectiveness:</strong> Forms a protective barrier inhibiting spore germination on the leaf surface.</p>
+                                        </div>
+
+                                        <div class="p-3 bg-subtle rounded border">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <strong class="text-sm text-primary">Bio-Fungicide (Bacillus subtilis strain QST 713)</strong>
+                                                <span class="badge badge-success">Biological Formulation</span>
+                                            </div>
+                                            <p class="text-xs text-muted mb-2"><strong>Dosage & Method:</strong> Apply according to manufacturer specification as a preventive preventative foliar drench.</p>
+                                            <p class="text-xs text-secondary mb-0"><strong>Effectiveness:</strong> Active bacterium colonizes leaf surfaces, displacing pathogenic fungal mycelium.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="lib-chemical" role="tabpanel">
+                                    <div class="d-flex flex-column gap-3">
+                                        <div class="ai-disclaimer mb-2">
+                                            <i data-lucide="shield-alert" aria-hidden="true" style="flex-shrink: 0;"></i>
+                                            <span><strong>Chemical Safety:</strong> Always consult certified agricultural agronomists, respect pre-harvest intervals, and avoid spraying during flowering to protect pollinators.</span>
+                                        </div>
+
+                                        <div class="p-3 bg-subtle rounded border">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <strong class="text-sm text-primary">Chlorothalonil (Bravo / Daconil)</strong>
+                                                <span class="badge badge-warning">Broad Spectrum Contact</span>
+                                            </div>
+                                            <p class="text-xs text-muted mb-2"><strong>Dosage:</strong> 1.5 – 2.0 kg/ha in 500 liters of water. Spray every 7 to 10 days during humid periods.</p>
+                                            <p class="text-xs text-secondary mb-0"><strong>Pre-Harvest Interval (PHI):</strong> 1 day on field tomatoes.</p>
+                                        </div>
+
+                                        <div class="p-3 bg-subtle rounded border">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <strong class="text-sm text-primary">Azoxystrobin (Heritage / Quadris)</strong>
+                                                <span class="badge badge-warning">Systemic Strobilurin</span>
+                                            </div>
+                                            <p class="text-xs text-muted mb-2"><strong>Dosage:</strong> 250 - 300 ml/ha. Limit to 2 consecutive applications before alternating fungicide classes.</p>
+                                            <p class="text-xs text-secondary mb-0"><strong>Resistance Management:</strong> Must alternate with multisite protectants (e.g. Mancozeb) to prevent resistance.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+
+                <!-- Right Column: Prevention & Quick Actions -->
+                <div class="d-flex flex-column gap-4">
+
+                    <!-- Cultural Prevention Tips -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="text-semibold text-primary">Agronomic Prevention</span>
+                        </div>
+                        <div class="card-body">
+                            <ul class="d-flex flex-column gap-3 text-xs text-muted mb-0">
+                                <li class="d-flex gap-2">
+                                    <i data-lucide="check-circle" class="text-accent" style="flex-shrink: 0;" aria-hidden="true"></i>
+                                    <span><strong>Strict Crop Rotation:</strong> Rotate out of Solanaceae (tomato, potato, eggplant, pepper) for 3–4 seasons.</span>
+                                </li>
+                                <li class="d-flex gap-2">
+                                    <i data-lucide="check-circle" class="text-accent" style="flex-shrink: 0;" aria-hidden="true"></i>
+                                    <span><strong>Organic Mulching:</strong> Apply clean straw or plastic mulch to create a physical barrier preventing rain-splash from soil.</span>
+                                </li>
+                                <li class="d-flex gap-2">
+                                    <i data-lucide="check-circle" class="text-accent" style="flex-shrink: 0;" aria-hidden="true"></i>
+                                    <span><strong>Drip Irrigation:</strong> Water only the root zone. Avoid overhead sprinklers that wet canopy foliage.</span>
+                                </li>
+                                <li class="d-flex gap-2">
+                                    <i data-lucide="check-circle" class="text-accent" style="flex-shrink: 0;" aria-hidden="true"></i>
+                                    <span><strong>Lower Canopy Pruning:</strong> Prune suckers and foliage below the first fruit cluster to maintain canopy airflow.</span>
+                                </li>
+                                <li class="d-flex gap-2">
+                                    <i data-lucide="check-circle" class="text-accent" style="flex-shrink: 0;" aria-hidden="true"></i>
+                                    <span><strong>Field Sanitation:</strong> Remove and destroy (do not compost) heavily blighted vines at the end of each harvest.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- AI Diagnostic Action Card -->
+                    <div class="card bg-subtle p-4 text-center">
+                        <div class="empty-state-icon" style="font-size: 2.5rem;">🔍</div>
+                        <h3 class="text-sm text-bold text-primary mb-2">Think your tomatoes have this?</h3>
+                        <p class="text-xs text-muted mb-4">Snap a photo and get an instant AI confidence match and remedy report.</p>
+                        <a href="scan.html" class="btn btn-primary btn-full btn-sm">
+                            <i data-lucide="camera" aria-hidden="true"></i>
+                            Scan Leaf Photo
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ====================================================================
+         FOOTER
+         ==================================================================== -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="container footer-inner">
+            <div class="footer-top">
+                <div>
+                    <div class="footer-brand-name">🌿 AgroDoc</div>
+                    <p class="footer-brand-desc">
+                        AI-powered tomato leaf disease detection and remedy recommendations for modern agriculture.
+                    </p>
+                </div>
+                <nav class="footer-nav-grid" aria-label="Footer navigation">
+                    <div>
+                        <h3 class="footer-nav-title">Application</h3>
+                        <a href="index.html" class="footer-nav-link">Home</a>
+                        <a href="dashboard.html" class="footer-nav-link">Dashboard</a>
+                        <a href="scan.html" class="footer-nav-link">New Scan</a>
+                        <a href="library.html" class="footer-nav-link">Disease Library</a>
+                    </div>
+                    <div>
+                        <h3 class="footer-nav-title">Resources</h3>
+                        <a href="docs/PROJECT_PLAN.md" class="footer-nav-link">Project Plan</a>
+                        <a href="library.html" class="footer-nav-link">Treatment Library</a>
+                    </div>
+                    <div>
+                        <h3 class="footer-nav-title">Project</h3>
+                        <a href="https://github.com" class="footer-nav-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+                        <a href="404.html" class="footer-nav-link">Status</a>
+                    </div>
+                </nav>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 AgroDoc. Final-Year CSE Project.</span>
+                <span>Built with Java Spring Boot + MySQL + AI</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AgroDoc Auth & API Utilities -->
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+
+    <script>
+        // Check if user is logged in to adapt navbar
+        if (isLoggedIn()) {
+            document.getElementById('nav-actions-auth').style.display = 'flex';
+            document.getElementById('nav-actions-guest').style.display = 'none';
+            hydrateNavbar();
+        } else {
+            document.getElementById('nav-actions-auth').style.display = 'none';
+            document.getElementById('nav-actions-guest').style.display = 'flex';
+        }
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>

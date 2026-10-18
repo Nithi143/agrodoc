@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Upload tomato leaf photographs for instant AI disease diagnosis and treatment recommendations.">
+    <title>New Disease Scan — AgroDoc</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <!-- AgroDoc Main Design System -->
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+    <!-- ====================================================================
+         NAVBAR (Authenticated)
+         ==================================================================== -->
+    <nav class="agrodoc-nav" id="main-nav" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a href="dashboard.html" class="nav-brand" aria-label="AgroDoc Dashboard">
+                <div class="nav-brand-icon" aria-hidden="true">🌿</div>
+                <span class="nav-brand-name">AgroDoc</span>
+            </a>
+
+            <ul class="nav-links" id="nav-links-list" role="list">
+                <li><a href="dashboard.html" class="nav-link" id="nav-dashboard">Dashboard</a></li>
+                <li><a href="scan.html" class="nav-link active" id="nav-scan">New Scan</a></li>
+                <li><a href="library.html" class="nav-link" id="nav-library">Library</a></li>
+                <li><a href="history.html" class="nav-link" id="nav-history">History</a></li>
+                <li><a href="settings.html" class="nav-link" id="nav-settings">Settings</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <div class="nav-user-chip" id="nav-user-chip">
+                    <div class="nav-avatar" id="nav-user-avatar" aria-hidden="true">?</div>
+                    <span id="nav-user-name" class="nav-user-label">Loading…</span>
+                </div>
+                <button class="btn btn-ghost btn-sm" id="btn-logout">
+                    <i data-lucide="log-out" aria-hidden="true"></i>
+                    Logout
+                </button>
+            </div>
+
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle mobile menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ====================================================================
+         MAIN CONTENT — SCAN / UPLOAD SHELL
+         ==================================================================== -->
+    <main class="main-content" id="main">
+        <div class="container py-5">
+
+            <!-- Breadcrumb Navigation -->
+            <nav aria-label="Breadcrumb" class="mb-4">
+                <ol class="d-flex gap-2 text-sm text-muted">
+                    <li><a href="dashboard.html" class="text-muted">Dashboard</a></li>
+                    <li><span class="mx-1">/</span></li>
+                    <li class="text-primary text-semibold" aria-current="page">New Scan</li>
+                </ol>
+            </nav>
+
+            <!-- Page Header -->
+            <div class="mb-6">
+                <span class="section-tag">Diagnostic Tool</span>
+                <h1 class="section-title mt-2">Upload Tomato Leaf Image</h1>
+                <p class="section-subtitle">
+                    Select or drop a clear photograph of an affected tomato leaf. Our AI will analyze symptoms to diagnose diseases and recommend scientific treatments.
+                </p>
+            </div>
+
+            <div class="grid-2">
+
+                <!-- Left Column: Upload Dropzone & Preview -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="text-semibold text-primary">Image Upload</span>
+                        <span class="badge badge-neutral">JPEG, PNG, WebP (Max 5MB)</span>
+                    </div>
+                    <div class="card-body">
+                        <!-- Dropzone Area -->
+                        <div id="dropzone" class="p-5 text-center rounded border-2 border-dashed bg-subtle" style="border: 2px dashed var(--color-border-strong); cursor: pointer;" role="region" aria-label="File upload dropzone">
+                            <input type="file" id="leaf-image-input" class="d-none" accept="image/jpeg,image/png,image/webp" aria-label="Choose tomato leaf image">
+                            <div class="empty-state-icon">📷</div>
+                            <h3 class="empty-state-title">Drag & drop your leaf photo here</h3>
+                            <p class="text-muted text-sm mb-4">or click anywhere in this area to browse from your device</p>
+                            <button type="button" class="btn btn-primary btn-sm" id="btn-browse-file">
+                                <i data-lucide="folder" aria-hidden="true"></i>
+                                Choose File
+                            </button>
+                        </div>
+
+                        <!-- Image Preview Area (Populated when user selects a file) -->
+                        <div id="preview-area" class="d-none mt-4">
+                            <div class="card p-3 bg-subtle">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <span class="text-sm text-semibold text-primary">Selected Photograph</span>
+                                    <button type="button" class="btn btn-ghost btn-sm text-danger" id="btn-remove-image">
+                                        <i data-lucide="trash-2" aria-hidden="true"></i>
+                                        Remove
+                                    </button>
+                                </div>
+                                <div class="text-center bg-card p-2 rounded mb-3">
+                                    <img id="image-preview" src="#" alt="Selected tomato leaf preview" style="max-height: 280px; margin: 0 auto; object-fit: contain;">
+                                </div>
+                                <div class="d-flex justify-content-between text-xs text-muted mb-4">
+                                    <span id="preview-filename">leaf-sample.jpg</span>
+                                    <span id="preview-filesize">0 KB</span>
+                                </div>
+
+                                <button type="button" class="btn btn-accent btn-full btn-lg" id="btn-start-analysis">
+                                    <i data-lucide="sparkles" aria-hidden="true"></i>
+                                    Analyze Leaf with AI
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- AI Disclaimer -->
+                        <div class="ai-disclaimer mt-4" role="note">
+                            <i data-lucide="alert-circle" aria-hidden="true" style="flex-shrink: 0;"></i>
+                            <span>
+                                <strong>Advisory Note:</strong> AI diagnoses provide guidance based on leaf pattern detection. For large-scale agronomic interventions, cross-verify with local agricultural extension officers.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Photography Best Practices -->
+                <div class="d-flex flex-column gap-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="text-semibold text-primary">Photography Guidelines for Accurate Diagnosis</span>
+                        </div>
+                        <div class="card-body">
+                            <ul class="d-flex flex-column gap-3">
+                                <li class="d-flex gap-3 align-items-start">
+                                    <span class="badge badge-success" style="margin-top: 2px;"><i data-lucide="check" aria-hidden="true"></i></span>
+                                    <div>
+                                        <strong class="d-block text-sm">Focus on a single leaf</strong>
+                                        <p class="text-muted text-xs mb-0">Capture the leaf clearly filling the frame rather than the entire tomato plant or field.</p>
+                                    </div>
+                                </li>
+                                <li class="d-flex gap-3 align-items-start">
+                                    <span class="badge badge-success" style="margin-top: 2px;"><i data-lucide="check" aria-hidden="true"></i></span>
+                                    <div>
+                                        <strong class="d-block text-sm">Natural, bright lighting</strong>
+                                        <p class="text-muted text-xs mb-0">Photograph outdoors under daylight. Avoid heavy shadows, intense backlighting, or direct flash reflections.</p>
+                                    </div>
+                                </li>
+                                <li class="d-flex gap-3 align-items-start">
+                                    <span class="badge badge-success" style="margin-top: 2px;"><i data-lucide="check" aria-hidden="true"></i></span>
+                                    <div>
+                                        <strong class="d-block text-sm">Capture visible lesions</strong>
+                                        <p class="text-muted text-xs mb-0">Ensure spots, yellowing margins, or blight marks are sharp and in focus.</p>
+                                    </div>
+                                </li>
+                                <li class="d-flex gap-3 align-items-start">
+                                    <span class="badge badge-danger" style="margin-top: 2px;"><i data-lucide="x" aria-hidden="true"></i></span>
+                                    <div>
+                                        <strong class="d-block text-sm">Avoid blurry or distant captures</strong>
+                                        <p class="text-muted text-xs mb-0">Images taken too far away or out-of-focus lower AI model classification confidence.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card bg-subtle">
+                        <div class="card-body">
+                            <h2 class="text-sm text-semibold text-primary mb-2">Supported Disease Types</h2>
+                            <p class="text-xs text-muted mb-3">AgroDoc detects common tomato foliage pathologies including:</p>
+                            <div class="d-flex flex-wrap gap-2">
+                                <span class="badge badge-neutral">Early Blight</span>
+                                <span class="badge badge-neutral">Late Blight</span>
+                                <span class="badge badge-neutral">Leaf Mold</span>
+                                <span class="badge badge-neutral">Septoria Spot</span>
+                                <span class="badge badge-neutral">Bacterial Spot</span>
+                                <span class="badge badge-neutral">Yellow Leaf Curl</span>
+                                <span class="badge badge-success">Healthy Foliage</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ====================================================================
+         FOOTER
+         ==================================================================== -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="container footer-inner">
+            <div class="footer-top">
+                <div>
+                    <div class="footer-brand-name">🌿 AgroDoc</div>
+                    <p class="footer-brand-desc">
+                        AI-powered tomato leaf disease detection and remedy recommendations for modern agriculture.
+                    </p>
+                </div>
+                <nav class="footer-nav-grid" aria-label="Footer navigation">
+                    <div>
+                        <h3 class="footer-nav-title">Application</h3>
+                        <a href="dashboard.html" class="footer-nav-link">Dashboard</a>
+                        <a href="scan.html" class="footer-nav-link">New Scan</a>
+                        <a href="library.html" class="footer-nav-link">Disease Library</a>
+                        <a href="history.html" class="footer-nav-link">Scan History</a>
+                    </div>
+                    <div>
+                        <h3 class="footer-nav-title">Resources</h3>
+                        <a href="docs/PROJECT_PLAN.md" class="footer-nav-link">Project Plan</a>
+                        <a href="library.html" class="footer-nav-link">Treatment Library</a>
+                    </div>
+                    <div>
+                        <h3 class="footer-nav-title">Account</h3>
+                        <a href="settings.html" class="footer-nav-link">Settings</a>
+                        <a href="#" class="footer-nav-link" id="footer-btn-logout">Logout</a>
+                    </div>
+                </nav>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 AgroDoc. Final-Year CSE Project.</span>
+                <span>Built with Java Spring Boot + MySQL + AI</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AgroDoc Auth & API Utilities -->
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+
+    <script>
+        requireAuth();
+        hydrateNavbar();
+        lucide.createIcons();
+
+        // Bind logout in footer
+        const footerLogout = document.getElementById('footer-btn-logout');
+        if (footerLogout) {
+            footerLogout.addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
+        }
+
+        // UI Shell preview interaction (Client-side visual preview only)
+        const fileInput = document.getElementById('leaf-image-input');
+        const dropzone = document.getElementById('dropzone');
+        const browseBtn = document.getElementById('btn-browse-file');
+        const previewArea = document.getElementById('preview-area');
+        const previewImg = document.getElementById('image-preview');
+        const previewName = document.getElementById('preview-filename');
+        const previewSize = document.getElementById('preview-filesize');
+        const removeBtn = document.getElementById('btn-remove-image');
+        const startBtn = document.getElementById('btn-start-analysis');
+
+        if (dropzone && fileInput) {
+            dropzone.addEventListener('click', () => fileInput.click());
+            if (browseBtn) browseBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', () => {
+                const file = fileInput.files[0];
+                if (file) {
+                    previewName.textContent = file.name;
+                    previewSize.textContent = `${(file.size / 1024).toFixed(1)} KB`;
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        previewImg.src = e.target.result;
+                        previewArea.classList.remove('d-none');
+                        dropzone.classList.add('d-none');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            if (removeBtn) {
+                removeBtn.addEventListener('click', () => {
+                    fileInput.value = '';
+                    previewArea.classList.add('d-none');
+                    dropzone.classList.remove('d-none');
+                });
+            }
+
+            if (startBtn) {
+                startBtn.addEventListener('click', () => {
+                    // UI shell action: In Phase 6 this invokes api.postMultipart('/scan/upload')
+                    window.location.href = 'result.html';
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Searchable encyclopedia of tomato leaf diseases, pathogen causes, symptoms, and science-backed organic and chemical treatment remedies.">
+    <title>Tomato Disease Library — AgroDoc</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <!-- AgroDoc Main Design System -->
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+    <!-- ====================================================================
+         NAVBAR (Universal / Dual-state)
+         ==================================================================== -->
+    <nav class="agrodoc-nav" id="main-nav" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand" aria-label="AgroDoc Home">
+                <div class="nav-brand-icon" aria-hidden="true">🌿</div>
+                <span class="nav-brand-name">AgroDoc</span>
+            </a>
+
+            <ul class="nav-links" id="nav-links-list" role="list">
+                <li><a href="index.html" class="nav-link" id="nav-home">Home</a></li>
+                <li><a href="dashboard.html" class="nav-link" id="nav-dashboard">Dashboard</a></li>
+                <li><a href="scan.html" class="nav-link" id="nav-scan">New Scan</a></li>
+                <li><a href="library.html" class="nav-link active" id="nav-library">Library</a></li>
+                <li><a href="history.html" class="nav-link" id="nav-history">History</a></li>
+            </ul>
+
+            <!-- Dynamic Nav Actions (Authenticated vs Guest) -->
+            <div class="nav-actions" id="nav-actions-auth" style="display: none;">
+                <div class="nav-user-chip" id="nav-user-chip">
+                    <div class="nav-avatar" id="nav-user-avatar" aria-hidden="true">?</div>
+                    <span id="nav-user-name" class="nav-user-label">Loading…</span>
+                </div>
+                <button class="btn btn-ghost btn-sm" id="btn-logout">
+                    <i data-lucide="log-out" aria-hidden="true"></i>
+                    Logout
+                </button>
+            </div>
+
+            <div class="nav-actions" id="nav-actions-guest">
+                <a href="login.html" class="btn btn-ghost btn-sm" id="btn-nav-login">Log In</a>
+                <a href="register.html" class="btn btn-primary btn-sm" id="btn-nav-register">Get Started</a>
+            </div>
+
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle mobile menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ====================================================================
+         MAIN CONTENT — DISEASE LIBRARY
+         ==================================================================== -->
+    <main class="main-content" id="main">
+        <div class="container py-5">
+
+            <!-- Page Title -->
+            <div class="mb-6">
+                <span class="section-tag">Educational Reference</span>
+                <h1 class="section-title mt-2">Tomato Leaf Disease Library</h1>
+                <p class="section-subtitle">
+                    Explore comprehensive pathology profiles, visual symptoms, and treatment guidelines for common tomato diseases. No image upload required.
+                </p>
+            </div>
+
+            <!-- Search and Filter Toolbar -->
+            <div class="card mb-6">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap align-items-center gap-3">
+                        <!-- Search Box -->
+                        <div class="flex-grow-1" style="min-width: 260px;">
+                            <label for="search-disease" class="visually-hidden">Search diseases</label>
+                            <div class="position-relative">
+                                <input type="text" id="search-disease" class="form-control" placeholder="Search by disease name, pathogen, or keyword…">
+                            </div>
+                        </div>
+
+                        <!-- Severity Filter Dropdown -->
+                        <div style="min-width: 180px;">
+                            <label for="filter-severity" class="visually-hidden">Filter by severity</label>
+                            <select id="filter-severity" class="form-control" aria-label="Filter by severity level">
+                                <option value="ALL">All Severities</option>
+                                <option value="HIGH">High Severity</option>
+                                <option value="MED">Medium Severity</option>
+                                <option value="LOW">Low Severity</option>
+                            </select>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" id="btn-filter-search">
+                            <i data-lucide="search" aria-hidden="true"></i>
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Disease Cards Grid (Phase 2 Educational UI Shell) -->
+            <div class="grid-3 mb-6" id="disease-cards-container">
+
+                <!-- Disease Card 1: Early Blight -->
+                <article class="card card-hover d-flex flex-column justify-content-between" aria-labelledby="disease-card-title-1">
+                    <div>
+                        <div class="card-header">
+                            <span class="badge badge-neutral">Fungal</span>
+                            <span class="badge badge-severity-high">High Severity</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center p-3 mb-3 bg-subtle rounded">
+                                <span style="font-size: 2.5rem;" aria-hidden="true">🍂</span>
+                            </div>
+                            <h2 class="text-lg text-primary text-bold mb-1" id="disease-card-title-1">Early Blight</h2>
+                            <p class="text-xs text-muted fst-italic mb-3">Alternaria solani</p>
+                            <p class="text-xs text-secondary mb-0">
+                                Brown to black concentric circular rings resembling target boards on older lower foliage, spreading upward.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="disease.html?id=1" class="btn btn-outline btn-full btn-sm">
+                            View Disease Guide <i data-lucide="arrow-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Disease Card 2: Late Blight -->
+                <article class="card card-hover d-flex flex-column justify-content-between" aria-labelledby="disease-card-title-2">
+                    <div>
+                        <div class="card-header">
+                            <span class="badge badge-neutral">Oomycete</span>
+                            <span class="badge badge-severity-high">High Severity</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center p-3 mb-3 bg-subtle rounded">
+                                <span style="font-size: 2.5rem;" aria-hidden="true">🌧️</span>
+                            </div>
+                            <h2 class="text-lg text-primary text-bold mb-1" id="disease-card-title-2">Late Blight</h2>
+                            <p class="text-xs text-muted fst-italic mb-3">Phytophthora infestans</p>
+                            <p class="text-xs text-secondary mb-0">
+                                Rapidly expanding water-soaked greasy lesions, white fuzzy mildew on undersides during wet and cool conditions.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="disease.html?id=2" class="btn btn-outline btn-full btn-sm">
+                            View Disease Guide <i data-lucide="arrow-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Disease Card 3: Leaf Mold -->
+                <article class="card card-hover d-flex flex-column justify-content-between" aria-labelledby="disease-card-title-3">
+                    <div>
+                        <div class="card-header">
+                            <span class="badge badge-neutral">Fungal</span>
+                            <span class="badge badge-severity-med">Medium Severity</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center p-3 mb-3 bg-subtle rounded">
+                                <span style="font-size: 2.5rem;" aria-hidden="true">🟨</span>
+                            </div>
+                            <h2 class="text-lg text-primary text-bold mb-1" id="disease-card-title-3">Leaf Mold</h2>
+                            <p class="text-xs text-muted fst-italic mb-3">Passalora fulva</p>
+                            <p class="text-xs text-secondary mb-0">
+                                Pale green to pale yellow spots on leaf uppersides with olive-green to grayish velvety fungal growth beneath.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="disease.html?id=3" class="btn btn-outline btn-full btn-sm">
+                            View Disease Guide <i data-lucide="arrow-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Disease Card 4: Septoria Leaf Spot -->
+                <article class="card card-hover d-flex flex-column justify-content-between" aria-labelledby="disease-card-title-4">
+                    <div>
+                        <div class="card-header">
+                            <span class="badge badge-neutral">Fungal</span>
+                            <span class="badge badge-severity-med">Medium Severity</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center p-3 mb-3 bg-subtle rounded">
+                                <span style="font-size: 2.5rem;" aria-hidden="true">🔍</span>
+                            </div>
+                            <h2 class="text-lg text-primary text-bold mb-1" id="disease-card-title-4">Septoria Leaf Spot</h2>
+                            <p class="text-xs text-muted fst-italic mb-3">Septoria lycopersici</p>
+                            <p class="text-xs text-secondary mb-0">
+                                Numerous small, circular spots with dark brown margins and gray or tan centers containing tiny black fruiting specks.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="disease.html?id=4" class="btn btn-outline btn-full btn-sm">
+                            View Disease Guide <i data-lucide="arrow-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Disease Card 5: Bacterial Spot -->
+                <article class="card card-hover d-flex flex-column justify-content-between" aria-labelledby="disease-card-title-5">
+                    <div>
+                        <div class="card-header">
+                            <span class="badge badge-neutral">Bacterial</span>
+                            <span class="badge badge-severity-med">Medium Severity</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center p-3 mb-3 bg-subtle rounded">
+                                <span style="font-size: 2.5rem;" aria-hidden="true">🦠</span>
+                            </div>
+                            <h2 class="text-lg text-primary text-bold mb-1" id="disease-card-title-5">Bacterial Spot</h2>
+                            <p class="text-xs text-muted fst-italic mb-3">Xanthomonas vesicatoria</p>
+                            <p class="text-xs text-secondary mb-0">
+                                Small, angular, dark greasy lesions on leaves and scabby raised spots on fruit, severe in high heat and driving rain.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="disease.html?id=5" class="btn btn-outline btn-full btn-sm">
+                            View Disease Guide <i data-lucide="arrow-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Disease Card 6: Tomato Yellow Leaf Curl -->
+                <article class="card card-hover d-flex flex-column justify-content-between" aria-labelledby="disease-card-title-6">
+                    <div>
+                        <div class="card-header">
+                            <span class="badge badge-neutral">Viral</span>
+                            <span class="badge badge-severity-high">High Severity</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center p-3 mb-3 bg-subtle rounded">
+                                <span style="font-size: 2.5rem;" aria-hidden="true">🦟</span>
+                            </div>
+                            <h2 class="text-lg text-primary text-bold mb-1" id="disease-card-title-6">Yellow Leaf Curl Virus</h2>
+                            <p class="text-xs text-muted fst-italic mb-3">TYLCV (Begomovirus)</p>
+                            <p class="text-xs text-secondary mb-0">
+                                Severe upward curling and yellow margins of young leaves, stunted growth, and dramatic blossom drop transmitted by whiteflies.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="disease.html?id=6" class="btn btn-outline btn-full btn-sm">
+                            View Disease Guide <i data-lucide="arrow-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+            </div>
+
+            <!-- Call to Action for AI Detection -->
+            <div class="card bg-primary-light p-4 text-center">
+                <h3 class="text-primary text-lg text-bold mb-2">Have a diseased tomato plant in your field?</h3>
+                <p class="text-secondary text-sm mb-4">Upload a photograph of an affected leaf for instant AI diagnosis and customized remedy recommendations.</p>
+                <div>
+                    <a href="scan.html" class="btn btn-primary">
+                        <i data-lucide="camera" aria-hidden="true"></i>
+                        Start Instant Leaf Scan
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ====================================================================
+         FOOTER
+         ==================================================================== -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="container footer-inner">
+            <div class="footer-top">
+                <div>
+                    <div class="footer-brand-name">🌿 AgroDoc</div>
+                    <p class="footer-brand-desc">
+                        AI-powered tomato leaf disease detection and remedy recommendations for modern agriculture.
+                    </p>
+                </div>
+                <nav class="footer-nav-grid" aria-label="Footer navigation">
+                    <div>
+                        <h3 class="footer-nav-title">Application</h3>
+                        <a href="index.html" class="footer-nav-link">Home</a>
+                        <a href="dashboard.html" class="footer-nav-link">Dashboard</a>
+                        <a href="scan.html" class="footer-nav-link">New Scan</a>
+                        <a href="library.html" class="footer-nav-link">Disease Library</a>
+                    </div>
+                    <div>
+                        <h3 class="footer-nav-title">Resources</h3>
+                        <a href="docs/PROJECT_PLAN.md" class="footer-nav-link">Project Plan</a>
+                        <a href="login.html" class="footer-nav-link">Log In</a>
+                        <a href="register.html" class="footer-nav-link">Register</a>
+                    </div>
+                    <div>
+                        <h3 class="footer-nav-title">Project</h3>
+                        <a href="https://github.com" class="footer-nav-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+                        <a href="404.html" class="footer-nav-link">Status</a>
+                    </div>
+                </nav>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 AgroDoc. Final-Year CSE Project.</span>
+                <span>Built with Java Spring Boot + MySQL + AI</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AgroDoc Auth & API Utilities -->
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+
+    <script>
+        // Check if user is logged in to adapt navbar
+        if (isLoggedIn()) {
+            document.getElementById('nav-actions-auth').style.display = 'flex';
+            document.getElementById('nav-actions-guest').style.display = 'none';
+            hydrateNavbar();
+        } else {
+            document.getElementById('nav-actions-auth').style.display = 'none';
+            document.getElementById('nav-actions-guest').style.display = 'flex';
+        }
+
+        lucide.createIcons();
+
+        // Client-side UI search filter (Shell interaction)
+        const searchInput = document.getElementById('search-disease');
+        const severityFilter = document.getElementById('filter-severity');
+        const cards = document.querySelectorAll('#disease-cards-container article');
+
+        function filterCards() {
+            const query = (searchInput.value || '').toLowerCase();
+            const severity = severityFilter.value;
+
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                const matchesQuery = text.includes(query);
+                const matchesSeverity = (severity === 'ALL') || text.includes(`${severity.toLowerCase()} severity`);
+
+                if (matchesQuery && matchesSeverity) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        if (searchInput) searchInput.addEventListener('input', filterCards);
+        if (severityFilter) severityFilter.addEventListener('change', filterCards);
+        const searchBtn = document.getElementById('btn-filter-search');
+        if (searchBtn) searchBtn.addEventListener('click', filterCards);
+    </script>
+</body>
+</html>

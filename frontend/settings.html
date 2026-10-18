@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage your AgroDoc profile, display name, and password security.">
+    <title>Account Settings — AgroDoc</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <!-- AgroDoc Main Design System -->
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+    <!-- ====================================================================
+         NAVBAR (Authenticated)
+         ==================================================================== -->
+    <nav class="agrodoc-nav" id="main-nav" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a href="dashboard.html" class="nav-brand" aria-label="AgroDoc Dashboard">
+                <div class="nav-brand-icon" aria-hidden="true">🌿</div>
+                <span class="nav-brand-name">AgroDoc</span>
+            </a>
+
+            <ul class="nav-links" id="nav-links-list" role="list">
+                <li><a href="dashboard.html" class="nav-link" id="nav-dashboard">Dashboard</a></li>
+                <li><a href="scan.html" class="nav-link" id="nav-scan">New Scan</a></li>
+                <li><a href="library.html" class="nav-link" id="nav-library">Library</a></li>
+                <li><a href="history.html" class="nav-link" id="nav-history">History</a></li>
+                <li><a href="settings.html" class="nav-link active" id="nav-settings">Settings</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <div class="nav-user-chip" id="nav-user-chip">
+                    <div class="nav-avatar" id="nav-user-avatar" aria-hidden="true">?</div>
+                    <span id="nav-user-name" class="nav-user-label">Loading…</span>
+                </div>
+                <button class="btn btn-ghost btn-sm" id="btn-logout">
+                    <i data-lucide="log-out" aria-hidden="true"></i>
+                    Logout
+                </button>
+            </div>
+
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle mobile menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ====================================================================
+         MAIN CONTENT — SETTINGS SHELL
+         ==================================================================== -->
+    <main class="main-content" id="main">
+        <div class="container py-5" style="max-width: 800px;">
+
+            <!-- Breadcrumb Navigation -->
+            <nav aria-label="Breadcrumb" class="mb-4">
+                <ol class="d-flex gap-2 text-sm text-muted">
+                    <li><a href="dashboard.html" class="text-muted">Dashboard</a></li>
+                    <li><span class="mx-1">/</span></li>
+                    <li class="text-primary text-semibold" aria-current="page">Account Settings</li>
+                </ol>
+            </nav>
+
+            <!-- Page Title Bar -->
+            <div class="mb-6">
+                <span class="section-tag">Account Management</span>
+                <h1 class="section-title mt-2">Account Settings</h1>
+                <p class="section-subtitle">Update your profile information and configure your account security.</p>
+            </div>
+
+            <!-- Profile Settings Card -->
+            <div class="card mb-6">
+                <div class="card-header">
+                    <span class="text-semibold text-primary">Personal Profile</span>
+                    <span class="badge badge-neutral">Basic Information</span>
+                </div>
+                <div class="card-body">
+                    <form id="profile-form">
+                        <div class="form-group">
+                            <label for="settings-fullname" class="form-label">Full Name</label>
+                            <input type="text" id="settings-fullname" class="form-control" placeholder="Enter your full name" value="Farmer User">
+                            <span class="form-hint">This name will be displayed in your dashboard greeting and reports.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="settings-email" class="form-label">Email Address</label>
+                            <input type="email" id="settings-email" class="form-control" value="farmer@example.com" disabled style="background-color: var(--color-bg-subtle); cursor: not-allowed;">
+                            <span class="form-hint">Email address is permanently associated with your AgroDoc diagnostic records.</span>
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-primary" id="btn-save-profile">
+                                <i data-lucide="check" aria-hidden="true"></i>
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Password Security Card -->
+            <div class="card mb-6">
+                <div class="card-header">
+                    <span class="text-semibold text-primary">Security & Password</span>
+                    <span class="badge badge-neutral">BCrypt Protected</span>
+                </div>
+                <div class="card-body">
+                    <form id="password-form">
+                        <div class="form-group">
+                            <label for="current-password" class="form-label">Current Password</label>
+                            <input type="password" id="current-password" class="form-control" placeholder="••••••••" autocomplete="current-password">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="new-password" class="form-label">New Password</label>
+                            <input type="password" id="new-password" class="form-control" placeholder="••••••••" autocomplete="new-password">
+                            <span class="form-hint">Minimum 8 characters with a mix of letters and numbers.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm-password" class="form-label">Confirm New Password</label>
+                            <input type="password" id="confirm-password" class="form-control" placeholder="••••••••" autocomplete="new-password">
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-outline" id="btn-update-password">
+                                <i data-lucide="key" aria-hidden="true"></i>
+                                Update Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Session & Logout Card -->
+            <div class="card border-danger">
+                <div class="card-header bg-subtle">
+                    <span class="text-semibold text-danger">Active Session</span>
+                </div>
+                <div class="card-body d-flex flex-wrap align-items-center justify-content-between gap-3">
+                    <div>
+                        <strong class="d-block text-sm text-primary">Sign Out of AgroDoc</strong>
+                        <p class="text-xs text-muted mb-0">Clear your local authentication token and return to the landing page.</p>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm" id="btn-danger-logout">
+                        <i data-lucide="log-out" aria-hidden="true"></i>
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ====================================================================
+         FOOTER
+         ==================================================================== -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="container footer-inner">
+            <div class="footer-top">
+                <div>
+                    <div class="footer-brand-name">🌿 AgroDoc</div>
+                    <p class="footer-brand-desc">
+                        AI-powered tomato leaf disease detection and remedy recommendations for modern agriculture.
+                    </p>
+                </div>
+                <nav class="footer-nav-grid" aria-label="Footer navigation">
+                    <div>
+                        <h3 class="footer-nav-title">Application</h3>
+                        <a href="dashboard.html" class="footer-nav-link">Dashboard</a>
+                        <a href="scan.html" class="footer-nav-link">New Scan</a>
+                        <a href="library.html" class="footer-nav-link">Disease Library</a>
+                        <a href="history.html" class="footer-nav-link">Scan History</a>
+                    </div>
+                    <div>
+                        <h3 class="footer-nav-title">Resources</h3>
+                        <a href="docs/PROJECT_PLAN.md" class="footer-nav-link">Project Plan</a>
+                        <a href="library.html" class="footer-nav-link">Treatment Library</a>
+                    </div>
+                    <div>
+                        <h3 class="footer-nav-title">Account</h3>
+                        <a href="settings.html" class="footer-nav-link">Settings</a>
+                        <a href="#" class="footer-nav-link" id="footer-btn-logout">Logout</a>
+                    </div>
+                </nav>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 AgroDoc. Final-Year CSE Project.</span>
+                <span>Built with Java Spring Boot + MySQL + AI</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AgroDoc Auth & API Utilities -->
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+
+    <script>
+        requireAuth();
+        hydrateNavbar();
+        lucide.createIcons();
+
+        // Populate cached user info into profile form
+        const user = getUser();
+        if (user) {
+            if (user.fullName) document.getElementById('settings-fullname').value = user.fullName;
+            if (user.email) document.getElementById('settings-email').value = user.email;
+        }
+
+        // Logout handlers
+        const dangerLogout = document.getElementById('btn-danger-logout');
+        if (dangerLogout) {
+            dangerLogout.addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
+        }
+
+        const footerLogout = document.getElementById('footer-btn-logout');
+        if (footerLogout) {
+            footerLogout.addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
+        }
+    </script>
+</body>
+</html>
