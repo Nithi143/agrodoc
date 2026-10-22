@@ -1,0 +1,223 @@
+/* ===========================================================================
+   AgroDoc — Authentication Stylesheet
+   auth.css (Login & Register Pages)
+   =========================================================================== */
+
+/* --- Centered Page Container --- */
+body.auth-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-8) var(--space-4);
+    background: radial-gradient(circle at 50% 10%, rgba(34, 197, 94, 0.10) 0%, transparent 60%),
+                radial-gradient(circle at 10% 90%, rgba(22, 101, 52, 0.05) 0%, transparent 50%),
+                var(--color-bg);
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* --- Back to Home Navigation Link --- */
+.auth-back-link {
+    position: absolute;
+    top: var(--space-6);
+    left: var(--space-6);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-primary);
+    background: white;
+    border: 1px solid var(--color-border);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-xs);
+    transition: all var(--transition-fast);
+    z-index: 10;
+}
+
+.auth-back-link:hover {
+    color: var(--color-primary-dark);
+    border-color: var(--color-accent);
+    transform: translateX(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* --- Auth Wrapper --- */
+.auth-container {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    z-index: 2;
+}
+
+/* --- Brand Logo & Header --- */
+.auth-brand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: var(--space-2);
+}
+
+.auth-brand .nav-brand {
+    transform: scale(1.1);
+}
+
+/* --- Auth Card --- */
+.auth-card {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-2xl);
+    box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    transition: box-shadow var(--transition-normal);
+}
+
+.auth-card .card-body {
+    padding: var(--space-8);
+}
+
+.auth-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 800;
+    color: var(--color-text-main);
+    text-align: center;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-1);
+}
+
+.auth-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    text-align: center;
+    margin-bottom: var(--space-6);
+    line-height: 1.5;
+}
+
+/* --- Input Fields & Password Toggle --- */
+.input-with-toggle {
+    position: relative;
+    width: 100%;
+}
+
+.input-with-toggle input {
+    padding-right: 3rem !important;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    transition: color var(--transition-fast), background var(--transition-fast);
+    padding: 0;
+}
+
+.password-toggle:hover {
+    color: var(--color-primary);
+    background: var(--color-bg-subtle);
+}
+
+.password-toggle:focus-visible {
+    outline: 2px solid var(--color-accent);
+}
+
+/* --- Checkbox Group --- */
+.form-check-group {
+    display: flex;
+    align-items: center;
+    margin-top: calc(var(--space-2) * -1);
+    margin-bottom: var(--space-6);
+}
+
+.form-check-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    user-select: none;
+}
+
+.form-check-input {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--color-primary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    margin: 0;
+}
+
+/* --- Divider --- */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: var(--space-6) 0;
+    color: var(--color-text-light);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.auth-divider span {
+    padding: 0 var(--space-3);
+    color: var(--color-text-secondary);
+}
+
+/* --- Footer Legal / Safety Note --- */
+.auth-footer-note {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    text-align: center;
+    line-height: var(--line-height-relaxed);
+    margin-top: var(--space-2);
+    padding: 0 var(--space-4);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 640px) {
+    body.auth-page {
+        padding: var(--space-16) var(--space-4) var(--space-8);
+        justify-content: flex-start;
+    }
+
+    .auth-back-link {
+        top: var(--space-4);
+        left: var(--space-4);
+        font-size: var(--font-size-xs);
+        padding: var(--space-1) var(--space-3);
+    }
+
+    .auth-card .card-body {
+        padding: var(--space-6) var(--space-5);
+    }
+
+    .auth-title {
+        font-size: var(--font-size-xl);
+    }
+}

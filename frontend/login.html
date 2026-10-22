@@ -115,10 +115,23 @@
         // Redirect to dashboard if already logged in
         requireGuest();
         lucide.createIcons();
+
         // Show session expired message if redirected here after token expiry
         const params = new URLSearchParams(window.location.search);
         if (params.get('reason') === 'session_expired') {
             document.getElementById('alert-session-expired').classList.remove('d-none');
+        }
+
+        // Toggle password visibility
+        const toggleBtn = document.getElementById('btn-toggle-password');
+        const passwordInput = document.getElementById('password');
+        if (toggleBtn && passwordInput) {
+            toggleBtn.addEventListener('click', () => {
+                const isPassword = passwordInput.getAttribute('type') === 'password';
+                passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+                toggleBtn.innerHTML = isPassword ? '<i data-lucide="eye-off"></i>' : '<i data-lucide="eye"></i>';
+                lucide.createIcons();
+            });
         }
     </script>
 </body>

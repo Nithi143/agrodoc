@@ -137,6 +137,77 @@
         // Redirect to dashboard if already logged in
         requireGuest();
         lucide.createIcons();
+
+        // Toggle password visibility
+        const toggleBtn = document.getElementById('btn-toggle-password');
+        const passwordInput = document.getElementById('password');
+        if (toggleBtn && passwordInput) {
+            toggleBtn.addEventListener('click', () => {
+                const isPassword = passwordInput.getAttribute('type') === 'password';
+                passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+                toggleBtn.innerHTML = isPassword ? '<i data-lucide="eye-off"></i>' : '<i data-lucide="eye"></i>';
+                lucide.createIcons();
+            });
+        }
+
+        // Client-side Validation Elements
+        const form = document.getElementById('register-form');
+        const confirmInput = document.getElementById('confirm-password');
+        const passError = document.getElementById('password-error');
+        const confirmError = document.getElementById('confirm-password-error');
+
+        function validatePasswords() {
+            let isValid = true;
+            const passVal = passwordInput.value;
+            const confirmVal = confirmInput.value;
+
+            // Password length check
+            if (passVal && passVal.length < 8) {
+                passwordInput.classList.add('is-invalid');
+                passwordInput.classList.remove('is-valid');
+                passError.textContent = 'Password must be at least 8 characters long.';
+                passError.classList.remove('d-none');
+                isValid = false;
+            } else if (passVal && passVal.length >= 8) {
+                passwordInput.classList.remove('is-invalid');
+                passwordInput.classList.add('is-valid');
+                passError.classList.add('d-none');
+            } else {
+                passwordInput.classList.remove('is-invalid', 'is-valid');
+                passError.classList.add('d-none');
+            }
+
+            // Confirm password matching check
+            if (confirmVal && confirmVal !== passVal) {
+                confirmInput.classList.add('is-invalid');
+                confirmInput.classList.remove('is-valid');
+                confirmError.textContent = 'Passwords do not match.';
+                confirmError.classList.remove('d-none');
+                isValid = false;
+            } else if (confirmVal && confirmVal === passVal && passVal.length >= 8) {
+                confirmInput.classList.remove('is-invalid');
+                confirmInput.classList.add('is-valid');
+                confirmError.classList.add('d-none');
+            } else {
+                confirmInput.classList.remove('is-invalid', 'is-valid');
+                confirmError.classList.add('d-none');
+            }
+
+            return isValid;
+        }
+
+        if (passwordInput && confirmInput) {
+            passwordInput.addEventListener('input', validatePasswords);
+            confirmInput.addEventListener('input', validatePasswords);
+        }
+
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                if (!validatePasswords()) {
+                    e.preventDefault();
+                }
+            });
+        }
     </script>
 </body>
 </html>

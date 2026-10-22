@@ -81,7 +81,7 @@
             <!-- Search and Filter Toolbar -->
             <div class="card mb-6">
                 <div class="card-body">
-                    <div class="d-flex flex-wrap align-items-center gap-3">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
                         <!-- Search Box -->
                         <div class="flex-grow-1" style="min-width: 260px;">
                             <label for="search-disease" class="visually-hidden">Search diseases</label>
@@ -101,11 +101,27 @@
                             </select>
                         </div>
 
-                        <button type="button" class="btn btn-primary" id="btn-filter-search">
-                            <i data-lucide="search" aria-hidden="true"></i>
-                            Search
-                        </button>
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-primary" id="btn-filter-search">
+                                <i data-lucide="search" aria-hidden="true"></i>
+                                Search
+                            </button>
+                            <span id="search-count" class="badge badge-primary py-2 px-3">6 Diseases</span>
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Empty State for Search -->
+            <div id="disease-empty-state" class="empty-state d-none card p-5 mb-6">
+                <div class="empty-state-icon">🌿</div>
+                <h3 class="empty-state-title">No matching diseases found</h3>
+                <p class="text-secondary text-sm">No plant diseases matched your search term or severity filter.</p>
+                <div class="mt-3">
+                    <button type="button" class="btn btn-outline btn-sm" id="btn-reset-filters">
+                        <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+                        Clear Filters
+                    </button>
                 </div>
             </div>
 
@@ -113,24 +129,24 @@
             <div class="grid-3 mb-6" id="disease-cards-container">
 
                 <!-- Disease Card 1: Early Blight -->
-                <article class="card card-hover d-flex flex-column justify-content-between" aria-labelledby="disease-card-title-1">
+                <article class="disease-card" aria-labelledby="disease-card-title-1">
                     <div>
-                        <div class="card-header">
+                        <div class="disease-card-header">
                             <span class="badge badge-neutral">Fungal</span>
                             <span class="badge badge-severity-high">High Severity</span>
                         </div>
                         <div class="card-body">
-                            <div class="text-center p-3 mb-3 bg-subtle rounded">
-                                <span style="font-size: 2.5rem;" aria-hidden="true">🍂</span>
+                            <div class="disease-card-visual" aria-hidden="true">
+                                <span>🍂</span>
                             </div>
-                            <h2 class="text-lg text-primary text-bold mb-1" id="disease-card-title-1">Early Blight</h2>
-                            <p class="text-xs text-muted fst-italic mb-3">Alternaria solani</p>
-                            <p class="text-xs text-secondary mb-0">
+                            <h2 class="disease-card-title" id="disease-card-title-1">Early Blight</h2>
+                            <p class="disease-card-pathogen">Alternaria solani</p>
+                            <p class="disease-card-desc">
                                 Brown to black concentric circular rings resembling target boards on older lower foliage, spreading upward.
                             </p>
                         </div>
                     </div>
-                    <div class="card-footer">
+                    <div class="disease-card-footer">
                         <a href="disease.html?id=1" class="btn btn-outline btn-full btn-sm">
                             View Disease Guide <i data-lucide="arrow-right" aria-hidden="true"></i>
                         </a>
@@ -138,24 +154,24 @@
                 </article>
 
                 <!-- Disease Card 2: Late Blight -->
-                <article class="card card-hover d-flex flex-column justify-content-between" aria-labelledby="disease-card-title-2">
+                <article class="disease-card" aria-labelledby="disease-card-title-2">
                     <div>
-                        <div class="card-header">
+                        <div class="disease-card-header">
                             <span class="badge badge-neutral">Oomycete</span>
                             <span class="badge badge-severity-high">High Severity</span>
                         </div>
                         <div class="card-body">
-                            <div class="text-center p-3 mb-3 bg-subtle rounded">
-                                <span style="font-size: 2.5rem;" aria-hidden="true">🌧️</span>
+                            <div class="disease-card-visual" aria-hidden="true">
+                                <span>🌧️</span>
                             </div>
-                            <h2 class="text-lg text-primary text-bold mb-1" id="disease-card-title-2">Late Blight</h2>
-                            <p class="text-xs text-muted fst-italic mb-3">Phytophthora infestans</p>
-                            <p class="text-xs text-secondary mb-0">
+                            <h2 class="disease-card-title" id="disease-card-title-2">Late Blight</h2>
+                            <p class="disease-card-pathogen">Phytophthora infestans</p>
+                            <p class="disease-card-desc">
                                 Rapidly expanding water-soaked greasy lesions, white fuzzy mildew on undersides during wet and cool conditions.
                             </p>
                         </div>
                     </div>
-                    <div class="card-footer">
+                    <div class="disease-card-footer">
                         <a href="disease.html?id=2" class="btn btn-outline btn-full btn-sm">
                             View Disease Guide <i data-lucide="arrow-right" aria-hidden="true"></i>
                         </a>
@@ -163,24 +179,24 @@
                 </article>
 
                 <!-- Disease Card 3: Leaf Mold -->
-                <article class="card card-hover d-flex flex-column justify-content-between" aria-labelledby="disease-card-title-3">
+                <article class="disease-card" aria-labelledby="disease-card-title-3">
                     <div>
-                        <div class="card-header">
+                        <div class="disease-card-header">
                             <span class="badge badge-neutral">Fungal</span>
                             <span class="badge badge-severity-med">Medium Severity</span>
                         </div>
                         <div class="card-body">
-                            <div class="text-center p-3 mb-3 bg-subtle rounded">
-                                <span style="font-size: 2.5rem;" aria-hidden="true">🟨</span>
+                            <div class="disease-card-visual" aria-hidden="true">
+                                <span>🟨</span>
                             </div>
-                            <h2 class="text-lg text-primary text-bold mb-1" id="disease-card-title-3">Leaf Mold</h2>
-                            <p class="text-xs text-muted fst-italic mb-3">Passalora fulva</p>
-                            <p class="text-xs text-secondary mb-0">
+                            <h2 class="disease-card-title" id="disease-card-title-3">Leaf Mold</h2>
+                            <p class="disease-card-pathogen">Passalora fulva</p>
+                            <p class="disease-card-desc">
                                 Pale green to pale yellow spots on leaf uppersides with olive-green to grayish velvety fungal growth beneath.
                             </p>
                         </div>
                     </div>
-                    <div class="card-footer">
+                    <div class="disease-card-footer">
                         <a href="disease.html?id=3" class="btn btn-outline btn-full btn-sm">
                             View Disease Guide <i data-lucide="arrow-right" aria-hidden="true"></i>
                         </a>
@@ -188,24 +204,24 @@
                 </article>
 
                 <!-- Disease Card 4: Septoria Leaf Spot -->
-                <article class="card card-hover d-flex flex-column justify-content-between" aria-labelledby="disease-card-title-4">
+                <article class="disease-card" aria-labelledby="disease-card-title-4">
                     <div>
-                        <div class="card-header">
+                        <div class="disease-card-header">
                             <span class="badge badge-neutral">Fungal</span>
                             <span class="badge badge-severity-med">Medium Severity</span>
                         </div>
                         <div class="card-body">
-                            <div class="text-center p-3 mb-3 bg-subtle rounded">
-                                <span style="font-size: 2.5rem;" aria-hidden="true">🔍</span>
+                            <div class="disease-card-visual" aria-hidden="true">
+                                <span>🔍</span>
                             </div>
-                            <h2 class="text-lg text-primary text-bold mb-1" id="disease-card-title-4">Septoria Leaf Spot</h2>
-                            <p class="text-xs text-muted fst-italic mb-3">Septoria lycopersici</p>
-                            <p class="text-xs text-secondary mb-0">
+                            <h2 class="disease-card-title" id="disease-card-title-4">Septoria Leaf Spot</h2>
+                            <p class="disease-card-pathogen">Septoria lycopersici</p>
+                            <p class="disease-card-desc">
                                 Numerous small, circular spots with dark brown margins and gray or tan centers containing tiny black fruiting specks.
                             </p>
                         </div>
                     </div>
-                    <div class="card-footer">
+                    <div class="disease-card-footer">
                         <a href="disease.html?id=4" class="btn btn-outline btn-full btn-sm">
                             View Disease Guide <i data-lucide="arrow-right" aria-hidden="true"></i>
                         </a>
@@ -213,24 +229,24 @@
                 </article>
 
                 <!-- Disease Card 5: Bacterial Spot -->
-                <article class="card card-hover d-flex flex-column justify-content-between" aria-labelledby="disease-card-title-5">
+                <article class="disease-card" aria-labelledby="disease-card-title-5">
                     <div>
-                        <div class="card-header">
+                        <div class="disease-card-header">
                             <span class="badge badge-neutral">Bacterial</span>
                             <span class="badge badge-severity-med">Medium Severity</span>
                         </div>
                         <div class="card-body">
-                            <div class="text-center p-3 mb-3 bg-subtle rounded">
-                                <span style="font-size: 2.5rem;" aria-hidden="true">🦠</span>
+                            <div class="disease-card-visual" aria-hidden="true">
+                                <span>🦠</span>
                             </div>
-                            <h2 class="text-lg text-primary text-bold mb-1" id="disease-card-title-5">Bacterial Spot</h2>
-                            <p class="text-xs text-muted fst-italic mb-3">Xanthomonas vesicatoria</p>
-                            <p class="text-xs text-secondary mb-0">
+                            <h2 class="disease-card-title" id="disease-card-title-5">Bacterial Spot</h2>
+                            <p class="disease-card-pathogen">Xanthomonas vesicatoria</p>
+                            <p class="disease-card-desc">
                                 Small, angular, dark greasy lesions on leaves and scabby raised spots on fruit, severe in high heat and driving rain.
                             </p>
                         </div>
                     </div>
-                    <div class="card-footer">
+                    <div class="disease-card-footer">
                         <a href="disease.html?id=5" class="btn btn-outline btn-full btn-sm">
                             View Disease Guide <i data-lucide="arrow-right" aria-hidden="true"></i>
                         </a>
@@ -238,24 +254,24 @@
                 </article>
 
                 <!-- Disease Card 6: Tomato Yellow Leaf Curl -->
-                <article class="card card-hover d-flex flex-column justify-content-between" aria-labelledby="disease-card-title-6">
+                <article class="disease-card" aria-labelledby="disease-card-title-6">
                     <div>
-                        <div class="card-header">
+                        <div class="disease-card-header">
                             <span class="badge badge-neutral">Viral</span>
                             <span class="badge badge-severity-high">High Severity</span>
                         </div>
                         <div class="card-body">
-                            <div class="text-center p-3 mb-3 bg-subtle rounded">
-                                <span style="font-size: 2.5rem;" aria-hidden="true">🦟</span>
+                            <div class="disease-card-visual" aria-hidden="true">
+                                <span>🦟</span>
                             </div>
-                            <h2 class="text-lg text-primary text-bold mb-1" id="disease-card-title-6">Yellow Leaf Curl Virus</h2>
-                            <p class="text-xs text-muted fst-italic mb-3">TYLCV (Begomovirus)</p>
-                            <p class="text-xs text-secondary mb-0">
+                            <h2 class="disease-card-title" id="disease-card-title-6">Yellow Leaf Curl Virus</h2>
+                            <p class="disease-card-pathogen">TYLCV (Begomovirus)</p>
+                            <p class="disease-card-desc">
                                 Severe upward curling and yellow margins of young leaves, stunted growth, and dramatic blossom drop transmitted by whiteflies.
                             </p>
                         </div>
                     </div>
-                    <div class="card-footer">
+                    <div class="disease-card-footer">
                         <a href="disease.html?id=6" class="btn btn-outline btn-full btn-sm">
                             View Disease Guide <i data-lucide="arrow-right" aria-hidden="true"></i>
                         </a>
@@ -342,29 +358,54 @@
         // Client-side UI search filter (Shell interaction)
         const searchInput = document.getElementById('search-disease');
         const severityFilter = document.getElementById('filter-severity');
+        const searchCountBadge = document.getElementById('search-count');
+        const emptyState = document.getElementById('disease-empty-state');
+        const resetFiltersBtn = document.getElementById('btn-reset-filters');
         const cards = document.querySelectorAll('#disease-cards-container article');
 
         function filterCards() {
-            const query = (searchInput.value || '').toLowerCase();
+            const query = (searchInput.value || '').toLowerCase().trim();
             const severity = severityFilter.value;
+            let visibleCount = 0;
 
             cards.forEach(card => {
                 const text = card.textContent.toLowerCase();
-                const matchesQuery = text.includes(query);
+                const matchesQuery = !query || text.includes(query);
                 const matchesSeverity = (severity === 'ALL') || text.includes(`${severity.toLowerCase()} severity`);
 
                 if (matchesQuery && matchesSeverity) {
                     card.style.display = 'flex';
+                    visibleCount++;
                 } else {
                     card.style.display = 'none';
                 }
             });
+
+            if (searchCountBadge) {
+                searchCountBadge.textContent = visibleCount === 1 ? '1 Disease' : `${visibleCount} Diseases`;
+            }
+
+            if (emptyState) {
+                if (visibleCount === 0) {
+                    emptyState.classList.remove('d-none');
+                } else {
+                    emptyState.classList.add('d-none');
+                }
+            }
         }
 
         if (searchInput) searchInput.addEventListener('input', filterCards);
         if (severityFilter) severityFilter.addEventListener('change', filterCards);
         const searchBtn = document.getElementById('btn-filter-search');
         if (searchBtn) searchBtn.addEventListener('click', filterCards);
+
+        if (resetFiltersBtn) {
+            resetFiltersBtn.addEventListener('click', () => {
+                if (searchInput) searchInput.value = '';
+                if (severityFilter) severityFilter.value = 'ALL';
+                filterCards();
+            });
+        }
     </script>
 </body>
 </html>
