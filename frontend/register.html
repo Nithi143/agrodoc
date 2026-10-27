@@ -201,10 +201,68 @@
             confirmInput.addEventListener('input', validatePasswords);
         }
 
+        const fullNameInput = document.getElementById('full-name');
+        const emailInput = document.getElementById('email');
+        const successAlert = document.getElementById('alert-register-success');
+        const errorAlert = document.getElementById('alert-register-error');
+        const btnRegister = document.getElementById('btn-register');
+        const btnText = document.getElementById('btn-register-text');
+        const btnSpinner = document.getElementById('btn-register-spinner');
+
         if (form) {
-            form.addEventListener('submit', (e) => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
                 if (!validatePasswords()) {
-                    e.preventDefault();
+                    return;
+                }
+
+                if (errorAlert) {
+                    errorAlert.classList.add('d-none');
+                    errorAlert.textContent = '';
+                }
+                if (successAlert) {
+                    successAlert.classList.add('d-none');
+                }
+
+                const fullName = fullNameInput ? fullNameInput.value.trim() : '';
+                const email = emailInput ? emailInput.value.trim() : '';
+                const password = passwordInput ? passwordInput.value : '';
+
+                if (!fullName || !email || !password) {
+                    if (errorAlert) {
+                        errorAlert.textContent = 'Please fill out all required fields.';
+                        errorAlert.classList.remove('d-none');
+                    }
+                    return;
+                }
+
+                if (btnRegister) btnRegister.disabled = true;
+                if (btnText) btnText.classList.add('d-none');
+                if (btnSpinner) btnSpinner.classList.remove('d-none');
+
+                try {
+                    await api.register({ fullName, email, password });
+                    if (successAlert) {
+                        successAlert.classList.remove('d-none');
+                    }
+                    setTimeout(() => {
+                        window.location.href = 'login.html?registered=true';
+                    }, 1200);
+                } catch (err) {
+                    console.error('[register] Error:', err);
+                    if (errorAlert) {
+                        let msg = err.message || 'Registration failed. Please try again.';
+                        if (err.fieldErrors) {
+                            msg = Object.values(err.fieldErrors).join('. ');
+                        }
+                        errorAlert.textContent = msg;
+                        errorAlert.classList.remove('d-none');
+                    }
+                } finally {
+                    if (btnRegister) btnRegister.disabled = false;
+                    if (btnText) btnText.classList.remove('d-none');
+                    if (btnSpinner) btnSpinner.classList.add('d-none');
                 }
             });
         }

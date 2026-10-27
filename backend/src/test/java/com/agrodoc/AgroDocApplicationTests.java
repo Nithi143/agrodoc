@@ -57,4 +57,33 @@ class AgroDocApplicationTests {
         mockMvc.perform(get("/api/users"))
                 .andExpect(status().isForbidden());
     }
+
+    @Test
+    void shouldServeScanHtml() throws Exception {
+        mockMvc.perform(get("/scan.html"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Upload Tomato Leaf Image")));
+    }
+
+    @Test
+    void shouldServeResultHtml() throws Exception {
+        mockMvc.perform(get("/result.html"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Diagnosis & Treatment Plan")));
+    }
+
+    @Test
+    void shouldServeRegisterHtml() throws Exception {
+        mockMvc.perform(get("/register.html"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Create your account")));
+    }
+
+    @Test
+    void shouldServeFrontendJsAssets() throws Exception {
+        mockMvc.perform(get("/js/scan.js"))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/js/result.js"))
+                .andExpect(status().isOk());
+    }
 }

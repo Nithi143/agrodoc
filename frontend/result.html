@@ -105,8 +105,8 @@
                     <div class="card-body">
                         <!-- Image Container Shell -->
                         <div class="bg-subtle p-3 rounded text-center mb-4">
-                            <div class="d-flex align-items-center justify-content-center bg-card rounded" style="min-height: 220px; border: 1px dashed var(--color-border);">
-                                <div class="text-center p-4">
+                            <div class="d-flex align-items-center justify-content-center bg-card rounded" style="min-height: 220px; border: 1px dashed var(--color-border);" id="image-container">
+                                <div class="text-center p-4" id="image-placeholder">
                                     <span style="font-size: 3rem;">🍃</span>
                                     <p class="text-xs text-muted mt-2 mb-0" id="result-image-caption">Uploaded Leaf Sample</p>
                                 </div>
@@ -251,7 +251,7 @@
                             <!-- Prevention Tips Section -->
                             <div class="divider"></div>
                             <h3 class="text-sm text-semibold text-primary mb-2">Cultural Prevention Tips</h3>
-                            <ul class="text-xs text-muted d-flex flex-column gap-1 mb-4">
+                            <ul class="text-xs text-muted d-flex flex-column gap-1 mb-4" id="cultural-prevention-tips-list">
                                 <li>• Drip irrigate at the base; keep tomato foliage dry whenever possible.</li>
                                 <li>• Mulch around the base of plants to avoid soil splashing onto lower foliage.</li>
                                 <li>• Prune lower leaves (bottom 12 inches) once plant is established to promote airflow.</li>
@@ -324,20 +324,7 @@
     <!-- AgroDoc Auth & API Utilities -->
     <script src="js/auth.js"></script>
     <script src="js/api.js"></script>
-
-    <script>
-        requireAuth();
-        hydrateNavbar();
-        lucide.createIcons();
-
-        // Footer logout handler
-        const footerLogout = document.getElementById('footer-btn-logout');
-        if (footerLogout) {
-            footerLogout.addEventListener('click', (e) => {
-                e.preventDefault();
-                logout();
-            });
-        }
-    </script>
+    <!-- Result rendering logic -->
+    <script src="js/result.js"></script>
 </body>
 </html>

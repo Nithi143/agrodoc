@@ -90,6 +90,9 @@
                         <span class="badge badge-neutral">JPEG, PNG, WebP (Max 5MB)</span>
                     </div>
                     <div class="card-body">
+                        <!-- Diagnostic & Validation Error Alert -->
+                        <div id="scan-error-alert" class="alert alert-danger d-none mb-4" role="alert"></div>
+
                         <!-- Dropzone Area -->
                         <div id="dropzone" class="p-5 text-center rounded border-2 border-dashed bg-subtle" style="border: 2px dashed var(--color-border-strong); cursor: pointer;" role="region" aria-label="File upload dropzone">
                             <input type="file" id="leaf-image-input" class="d-none" accept="image/jpeg,image/png,image/webp" aria-label="Choose tomato leaf image">
@@ -244,69 +247,7 @@
     <!-- AgroDoc Auth & API Utilities -->
     <script src="js/auth.js"></script>
     <script src="js/api.js"></script>
-
-    <script>
-        requireAuth();
-        hydrateNavbar();
-        lucide.createIcons();
-
-        // Bind logout in footer
-        const footerLogout = document.getElementById('footer-btn-logout');
-        if (footerLogout) {
-            footerLogout.addEventListener('click', (e) => {
-                e.preventDefault();
-                logout();
-            });
-        }
-
-        // UI Shell preview interaction (Client-side visual preview only)
-        const fileInput = document.getElementById('leaf-image-input');
-        const dropzone = document.getElementById('dropzone');
-        const browseBtn = document.getElementById('btn-browse-file');
-        const previewArea = document.getElementById('preview-area');
-        const previewImg = document.getElementById('image-preview');
-        const previewName = document.getElementById('preview-filename');
-        const previewSize = document.getElementById('preview-filesize');
-        const removeBtn = document.getElementById('btn-remove-image');
-        const startBtn = document.getElementById('btn-start-analysis');
-
-        if (dropzone && fileInput) {
-            dropzone.addEventListener('click', () => fileInput.click());
-            if (browseBtn) browseBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                fileInput.click();
-            });
-
-            fileInput.addEventListener('change', () => {
-                const file = fileInput.files[0];
-                if (file) {
-                    previewName.textContent = file.name;
-                    previewSize.textContent = `${(file.size / 1024).toFixed(1)} KB`;
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        previewImg.src = e.target.result;
-                        previewArea.classList.remove('d-none');
-                        dropzone.classList.add('d-none');
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            if (removeBtn) {
-                removeBtn.addEventListener('click', () => {
-                    fileInput.value = '';
-                    previewArea.classList.add('d-none');
-                    dropzone.classList.remove('d-none');
-                });
-            }
-
-            if (startBtn) {
-                startBtn.addEventListener('click', () => {
-                    // UI shell action: In Phase 6 this invokes api.postMultipart('/scan/upload')
-                    window.location.href = 'result.html';
-                });
-            }
-        }
-    </script>
+    <!-- Scan logic -->
+    <script src="js/scan.js"></script>
 </body>
 </html>

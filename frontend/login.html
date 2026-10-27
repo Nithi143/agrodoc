@@ -122,6 +122,16 @@
             document.getElementById('alert-session-expired').classList.remove('d-none');
         }
 
+        // Show registration success banner if redirected from register.html
+        if (params.get('registered') === 'true') {
+            const successAlert = document.createElement('div');
+            successAlert.className = 'alert alert-success mb-3';
+            successAlert.innerHTML = '<i data-lucide="check-circle"></i> Registration successful! Please log in with your credentials.';
+            const formCard = document.querySelector('.card-body');
+            if (formCard) formCard.insertBefore(successAlert, document.getElementById('login-form'));
+            lucide.createIcons();
+        }
+
         // Toggle password visibility
         const toggleBtn = document.getElementById('btn-toggle-password');
         const passwordInput = document.getElementById('password');
@@ -131,6 +141,60 @@
                 passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
                 toggleBtn.innerHTML = isPassword ? '<i data-lucide="eye-off"></i>' : '<i data-lucide="eye"></i>';
                 lucide.createIcons();
+            });
+        }
+
+        // Form Submission
+        const loginForm = document.getElementById('login-form');
+        const emailInput = document.getElementById('email');
+        const rememberInput = document.getElementById('remember-me');
+        const errorAlert = document.getElementById('alert-login-error');
+        const btnLogin = document.getElementById('btn-login');
+        const btnText = document.getElementById('btn-login-text');
+        const btnSpinner = document.getElementById('btn-login-spinner');
+
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                if (errorAlert) {
+                    errorAlert.classList.add('d-none');
+                    errorAlert.textContent = '';
+                }
+
+                const email = emailInput ? emailInput.value.trim() : '';
+                const password = passwordInput ? passwordInput.value : '';
+                const rememberMe = rememberInput ? rememberInput.checked : false;
+
+                if (!email || !password) {
+                    if (errorAlert) {
+                        errorAlert.textContent = 'Please enter both your email and password.';
+                        errorAlert.classList.remove('d-none');
+                    }
+                    return;
+                }
+
+                // Loading state
+                if (btnLogin) btnLogin.disabled = true;
+                if (btnText) btnText.classList.add('d-none');
+                if (btnSpinner) btnSpinner.classList.remove('d-none');
+
+                try {
+                    const response = await api.login({ email, password, rememberMe });
+                    setToken(response.token);
+                    setUser(response.user);
+                    window.location.href = 'dashboard.html';
+                } catch (err) {
+                    console.error('[login] Error:', err);
+                    if (errorAlert) {
+                        errorAlert.textContent = err.message || 'Login failed. Please check your credentials.';
+                        errorAlert.classList.remove('d-none');
+                    }
+                } finally {
+                    if (btnLogin) btnLogin.disabled = false;
+                    if (btnText) btnText.classList.remove('d-none');
+                    if (btnSpinner) btnSpinner.classList.add('d-none');
+                }
             });
         }
     </script>
