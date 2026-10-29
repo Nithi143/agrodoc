@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -84,7 +85,7 @@ public class ScanService {
         history.setUser(user);
         history.setImageFilename(savedFilename);
         history.setDiseaseLabel(prediction.diseaseName());
-        history.setConfidenceScore(prediction.confidence());
+        history.setConfidenceScore(BigDecimal.valueOf(prediction.confidence()));
         history.setHealthy(prediction.isHealthy());
         history.setRawApiResult(prediction.rawApiResponse());
         diseaseOpt.ifPresent(history::setDiseaseInfo);
@@ -128,7 +129,7 @@ public class ScanService {
                 history.getId(),
                 history.getDiseaseLabel(),
                 history.isHealthy(),
-                history.getConfidenceScore() != null ? history.getConfidenceScore() : 0.0,
+                history.getConfidenceScore() != null ? history.getConfidenceScore().doubleValue() : 0.0,
                 history.getImageFilename(),
                 scannedAt,
                 detail

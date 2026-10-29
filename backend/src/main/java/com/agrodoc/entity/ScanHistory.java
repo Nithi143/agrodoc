@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -38,8 +39,8 @@ public class ScanHistory {
     @Column(name = "disease_label", nullable = false, length = 150)
     private String diseaseLabel;
 
-    @Column(name = "confidence_score")
-    private Double confidenceScore;
+    @Column(name = "confidence_score", precision = 5, scale = 2)
+    private BigDecimal confidenceScore;
 
     @Column(name = "is_healthy", nullable = false)
     private boolean isHealthy = false;

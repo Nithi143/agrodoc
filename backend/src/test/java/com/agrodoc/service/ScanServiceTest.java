@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +117,7 @@ class ScanServiceTest {
         assertEquals(testUser, saved.getUser());
         assertEquals("stored-uuid-123.jpg", saved.getImageFilename());
         assertEquals("Early Blight", saved.getDiseaseLabel());
-        assertEquals(95.5, saved.getConfidenceScore());
+        assertEquals(BigDecimal.valueOf(95.5), saved.getConfidenceScore());
         assertFalse(saved.isHealthy());
         assertEquals(disease, saved.getDiseaseInfo());
     }
@@ -161,7 +162,7 @@ class ScanServiceTest {
         history.setUser(testUser);
         history.setDiseaseLabel("Late Blight");
         history.setImageFilename("uuid-test.jpg");
-        history.setConfidenceScore(92.0);
+        history.setConfidenceScore(BigDecimal.valueOf(92.0));
         history.setHealthy(false);
 
         // Manually set scannedAt if not persisted through JPA

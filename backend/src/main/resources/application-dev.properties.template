@@ -8,11 +8,11 @@
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
-# Database — fill in your local MySQL credentials
+# Database — fill in your local MySQL credentials or set DB_PASSWORD environment variable
 # ------------------------------------------------------------------------------
-spring.datasource.url=jdbc:mysql://localhost:3306/agrodoc_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-spring.datasource.username=root
-spring.datasource.password=YOUR_MYSQL_ROOT_PASSWORD
+spring.datasource.url=${DB_URL:jdbc:mysql://localhost:3306/agrodoc_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
+spring.datasource.username=${DB_USERNAME:root}
+spring.datasource.password=${DB_PASSWORD:YOUR_MYSQL_ROOT_PASSWORD}
 
 # ------------------------------------------------------------------------------
 # JPA — use 'validate' after schema.sql has been run
@@ -22,10 +22,11 @@ spring.jpa.hibernate.ddl-auto=validate
 spring.jpa.show-sql=true
 
 # ------------------------------------------------------------------------------
-# JWT Secret — replace with a secure random string of at least 32 characters
-# Example: generate with: openssl rand -base64 48
+# JWT Secret — Base64-encoded key of at least 256 bits (32 bytes) for HS256.
+# Example generator: openssl rand -base64 48
+# PowerShell: $b=New-Object byte[] 48; [System.Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($b); [Convert]::ToBase64String($b)
 # ------------------------------------------------------------------------------
-jwt.secret=REPLACE_WITH_YOUR_OWN_SECURE_SECRET_KEY_AT_LEAST_32_CHARS
+jwt.secret=s/LvF6WN+oChl252flnAXBTsS3vJNgtalFx8BFDAEwQ65P35MIliMfuxnW2hAhGM
 
 # ------------------------------------------------------------------------------
 # External AI API — fill in after completing Phase 5 API evaluation
