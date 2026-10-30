@@ -187,4 +187,116 @@ class ScanServiceTest {
 
         assertTrue(ex.getMessage().contains("Scan not found or access denied"));
     }
+
+    @Test
+    void shouldSuccessfullyScanNutrientDeficiencyLeafAndAttachRemedies() {
+        when(userRepository.findByEmail("farmer@example.com")).thenReturn(Optional.of(testUser));
+        when(fileStorageService.store(mockFile)).thenReturn("nutrient-uuid.jpg");
+
+        // External AI API returns "Nutrient deficiency"
+        ApiPrediction prediction = new ApiPrediction(
+                "Nutrient deficiency", 87.5, false, "{\"mock\": true}"
+        );
+        when(plantApiClient.classify(mockFile)).thenReturn(prediction);
+
+        DiseaseInfo deficiency = new DiseaseInfo();
+        deficiency.setId(11L);
+        deficiency.setDiseaseName("Nutrient Deficiency");
+        deficiency.setScientificName("Abiotic / Nutritional Disorder");
+        deficiency.setDescription("Nutrient deficiency in tomato crops.");
+        deficiency.setSymptoms("Chlorosis of foliage.");
+        deficiency.setCauses("Soil pH imbalance or nutrient depletion.");
+        deficiency.setPreventionTips("Soil testing and balanced fertilization.");
+        deficiency.setSeverityLevel(DiseaseInfo.SeverityLevel.LOW);
+
+        DiseaseRemedy organicRemedy = new DiseaseRemedy();
+        organicRemedy.setId(201L);
+        organicRemedy.setRemedyType(DiseaseRemedy.RemedyType.ORGANIC);
+        organicRemedy.setRemedyName("Compost and Organic Soil Conditioning");
+        organicRemedy.setApplication("Apply well-rotted compost based on soil test.");
+        deficiency.getRemedies().add(organicRemedy);
+
+        DiseaseRemedy chemicalRemedy = new DiseaseRemedy();
+        chemicalRemedy.setId(202L);
+        chemicalRemedy.setRemedyType(DiseaseRemedy.RemedyType.CHEMICAL);
+        chemicalRemedy.setRemedyName("Targeted Soil Amendment Based on Soil Test");
+        chemicalRemedy.setApplication("Conduct soil testing to identify deficient nutrient.");
+        deficiency.getRemedies().add(chemicalRemedy);
+
+        // Case-insensitive lookup resolves "Nutrient deficiency" to "Nutrient Deficiency"
+        when(diseaseInfoRepository.findByDiseaseNameIgnoreCase("Nutrient deficiency"))
+                .thenReturn(Optional.of(deficiency));
+
+        ScanResultDto result = scanService.scan(mockFile, "farmer@example.com");
+
+        assertNotNull(result);
+        assertEquals("Nutrient deficiency", result.diseaseLabel());
+        assertFalse(result.isHealthy());
+        assertEquals(87.5, result.confidenceScore());
+        assertNotNull(result.diseaseDetail());
+        assertEquals("Nutrient Deficiency", result.diseaseDetail().diseaseName());
+        assertEquals(2, result.diseaseDetail().remedies().size());
+
+        ArgumentCaptor<ScanHistory> captor = ArgumentCaptor.forClass(ScanHistory.class);
+        verify(scanHistoryRepository, times(1)).save(captor.capture());
+        assertEquals(deficiency, captor.getValue().getDiseaseInfo());
+    }
+
+    @Test
+    void shouldLookupExistingDiseaseWithTomatoPrefixNormalization() {
+        when(userRepository.findByEmail("farmer@example.com")).thenReturn(Optional.of(testUser));
+        when(fileStorageService.store(mockFile)).thenReturn("late-blight-uuid.jpg");
+
+        // AI API returns "Late Blight" without "Tomato " prefix
+        ApiPrediction prediction = new ApiPrediction(
+                "Late Blight", 93.0, false, "{\"mock\": true}"
+        );
+        when(plantApiClient.classify(mockFile)).thenReturn(prediction);
+
+        DiseaseInfo lateBlight = new DiseaseInfo();
+        lateBlight.setId(2L);
+        lateBlight.setDiseaseName("Tomato Late Blight");
+        lateBlight.setSeverityLevel(DiseaseInfo.SeverityLevel.HIGH);
+
+        // Direct lookup for "Late Blight" fails, but normalized "Tomato Late Blight" lookup succeeds
+        when(diseaseInfoRepository.findByDiseaseNameIgnoreCase("Late Blight")).thenReturn(Optional.empty());
+        when(diseaseInfoRepository.findByDiseaseNameIgnoreCase("Tomato Late Blight")).thenReturn(Optional.of(lateBlight));
+
+        ScanResultDto result = scanService.scan(mockFile, "farmer@example.com");
+
+        assertNotNull(result);
+        assertEquals("Late Blight", result.diseaseLabel());
+        assertNotNull(result.diseaseDetail());
+        assertEquals("Tomato Late Blight", result.diseaseDetail().diseaseName());
+
+        ArgumentCaptor<ScanHistory> captor = ArgumentCaptor.forClass(ScanHistory.class);
+        verify(scanHistoryRepository, times(1)).save(captor.capture());
+        assertEquals(lateBlight, captor.getValue().getDiseaseInfo());
+    }
+
+    @Test
+    void shouldHandleUnmatchedDiseaseGracefullyWithoutRemedies() {
+        when(userRepository.findByEmail("farmer@example.com")).thenReturn(Optional.of(testUser));
+        when(fileStorageService.store(mockFile)).thenReturn("unknown-uuid.jpg");
+
+        ApiPrediction prediction = new ApiPrediction(
+                "Unrecognized Pathogen X", 55.0, false, "{\"mock\": true}"
+        );
+        when(plantApiClient.classify(mockFile)).thenReturn(prediction);
+
+        // Repository finds no match for raw or normalized names
+        when(diseaseInfoRepository.findByDiseaseNameIgnoreCase(anyString())).thenReturn(Optional.empty());
+
+        ScanResultDto result = scanService.scan(mockFile, "farmer@example.com");
+
+        assertNotNull(result);
+        assertEquals("Unrecognized Pathogen X", result.diseaseLabel());
+        assertFalse(result.isHealthy());
+        assertNull(result.diseaseDetail());
+
+        ArgumentCaptor<ScanHistory> captor = ArgumentCaptor.forClass(ScanHistory.class);
+        verify(scanHistoryRepository, times(1)).save(captor.capture());
+        assertNull(captor.getValue().getDiseaseInfo());
+        assertEquals("Unrecognized Pathogen X", captor.getValue().getDiseaseLabel());
+    }
 }

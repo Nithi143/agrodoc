@@ -76,9 +76,8 @@ public class ScanService {
         log.info("AI prediction for user {}: disease='{}' confidence={}% healthy={}",
                 email, prediction.diseaseName(), prediction.confidence(), prediction.isHealthy());
 
-        // 4. Look up disease info from database (may be null for unrecognized labels)
-        Optional<DiseaseInfo> diseaseOpt = diseaseInfoRepository
-                .findByDiseaseNameIgnoreCase(prediction.diseaseName());
+        // 4. Look up disease info from database (normalizing label if needed)
+        Optional<DiseaseInfo> diseaseOpt = resolveDiseaseInfo(prediction.diseaseName());
 
         // 5. Save the scan history record
         ScanHistory history = new ScanHistory();
@@ -119,8 +118,13 @@ public class ScanService {
         ScanHistory history = scanHistoryRepository.findByIdAndUserId(scanId, user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Scan not found or access denied."));
 
-        ScanResultDto.DiseaseDetail detail = history.getDiseaseInfo() != null
-                ? toDiseaseDetail(history.getDiseaseInfo())
+        DiseaseInfo diseaseInfo = history.getDiseaseInfo();
+        if (diseaseInfo == null && history.getDiseaseLabel() != null && !history.isHealthy()) {
+            diseaseInfo = resolveDiseaseInfo(history.getDiseaseLabel()).orElse(null);
+        }
+
+        ScanResultDto.DiseaseDetail detail = diseaseInfo != null
+                ? toDiseaseDetail(diseaseInfo)
                 : null;
 
         String scannedAt = (history.getScannedAt() != null ? history.getScannedAt() : java.time.LocalDateTime.now()).format(FORMATTER);
@@ -162,5 +166,84 @@ public class ScanService {
                 d.getImageUrl(),
                 remedies
         );
+    }
+
+    /**
+     * Resolves DiseaseInfo from the database by normalizing the AI prediction label.
+     * Preserves exact matches first to ensure existing disease lookups remain intact,
+     * then checks canonical aliases and prefix variations ("Tomato ").
+     *
+     * @param rawLabel Disease label returned by the AI classifier
+     * @return Optional containing the matched DiseaseInfo, or empty if unrecognized
+     */
+    public Optional<DiseaseInfo> resolveDiseaseInfo(String rawLabel) {
+        if (rawLabel == null || rawLabel.isBlank()) {
+            return Optional.empty();
+        }
+
+        String trimmed = rawLabel.trim();
+
+        // 1. Direct match (case-insensitive) — preserves existing exact database mappings
+        Optional<DiseaseInfo> directMatch = diseaseInfoRepository.findByDiseaseNameIgnoreCase(trimmed);
+        if (directMatch.isPresent()) {
+            return directMatch;
+        }
+
+        // 2. Canonical mapping for specific external AI terminology variations
+        String canonical = mapToCanonicalName(trimmed);
+        if (canonical != null && !canonical.equalsIgnoreCase(trimmed)) {
+            Optional<DiseaseInfo> canonicalMatch = diseaseInfoRepository.findByDiseaseNameIgnoreCase(canonical);
+            if (canonicalMatch.isPresent()) {
+                return canonicalMatch;
+            }
+        }
+
+        // 3. Try with "Tomato " prefix if absent (e.g. "Early Blight" -> "Tomato Early Blight")
+        if (!trimmed.toLowerCase().startsWith("tomato ")) {
+            Optional<DiseaseInfo> tomatoPrefixed = diseaseInfoRepository.findByDiseaseNameIgnoreCase("Tomato " + trimmed);
+            if (tomatoPrefixed.isPresent()) {
+                return tomatoPrefixed;
+            }
+        } else {
+            // 4. Try stripping "Tomato " prefix (e.g. "Tomato Nutrient Deficiency" -> "Nutrient Deficiency")
+            String stripped = trimmed.substring(7).trim();
+            if (!stripped.isEmpty()) {
+                Optional<DiseaseInfo> strippedMatch = diseaseInfoRepository.findByDiseaseNameIgnoreCase(stripped);
+                if (strippedMatch.isPresent()) {
+                    return strippedMatch;
+                }
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    private String mapToCanonicalName(String label) {
+        String lower = label.toLowerCase();
+        return switch (lower) {
+            case "two-spotted spider mite", "two-spotted spider mites", "spider mite", "spider mites" ->
+                    "Tomato Spider Mites";
+            case "yellow leaf curl virus", "tomato yellow leaf curl" ->
+                    "Tomato Yellow Leaf Curl Virus";
+            case "mosaic virus", "tobacco mosaic virus" ->
+                    "Tomato Mosaic Virus";
+            case "bacterial spot" ->
+                    "Tomato Bacterial Spot";
+            case "early blight" ->
+                    "Tomato Early Blight";
+            case "late blight" ->
+                    "Tomato Late Blight";
+            case "leaf mold" ->
+                    "Tomato Leaf Mold";
+            case "septoria leaf spot" ->
+                    "Tomato Septoria Leaf Spot";
+            case "target spot" ->
+                    "Tomato Target Spot";
+            case "nutrient deficiency" ->
+                    "Nutrient Deficiency";
+            case "healthy" ->
+                    "Tomato Healthy";
+            default -> null;
+        };
     }
 }
