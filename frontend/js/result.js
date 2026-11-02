@@ -270,14 +270,39 @@ function renderScanResult(data, cachedPreview) {
                     No synthetic chemical fungicide or pesticide intervention is warranted for healthy tomato crops.
                 </div>
             `;
-        } else if (chemicalRemedies.length > 0) {
-            chemicalContainer.innerHTML = `
-                <div class="d-flex flex-column gap-3">
+        } else {
+            const isAdvisory = (r) => {
+                const name = (r.remedyName || '').toLowerCase();
+                return name.includes('no chemical') || name.includes('advisory');
+            };
+            const genuineChemicalRemedies = chemicalRemedies.filter(r => !isAdvisory(r));
+            const advisoryRemedies = chemicalRemedies.filter(r => isAdvisory(r));
+
+            let html = '<div class="d-flex flex-column gap-3">';
+
+            // 1. Separate informational advisory section (never rendered as treatment cards)
+            if (advisoryRemedies.length > 0) {
+                html += advisoryRemedies.map(r => `
+                    <div class="card p-3 bg-subtle rounded border border-info">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <i data-lucide="info" class="text-primary" aria-hidden="true" style="flex-shrink: 0;"></i>
+                            <strong class="text-sm text-primary">${escapeHtml(r.remedyName)}</strong>
+                            <span class="badge badge-neutral">Agronomic Advisory</span>
+                        </div>
+                        <p class="text-xs text-secondary mb-2"><strong>Management Guidance:</strong> ${escapeHtml(r.application)}</p>
+                        ${r.notes ? `<p class="text-xs text-muted mb-0"><strong>Extension Guidance:</strong> ${escapeHtml(r.notes)}</p>` : ''}
+                    </div>
+                `).join('');
+            }
+
+            // 2. Genuine chemical remedies (safety warning banner displayed strictly when chemicals exist)
+            if (genuineChemicalRemedies.length > 0) {
+                html += `
                     <div class="alert alert-warning py-2 mb-2" role="alert">
                         <i data-lucide="alert-triangle" aria-hidden="true" style="flex-shrink: 0;"></i>
                         <span class="text-xs">Follow safety intervals (PHI), wear personal protective equipment, and adhere to local agricultural chemical guidelines.</span>
                     </div>
-                    ${chemicalRemedies.map(r => `
+                    ${genuineChemicalRemedies.map(r => `
                         <div class="p-3 bg-subtle rounded border">
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <strong class="text-sm text-primary">${escapeHtml(r.remedyName)}</strong>
@@ -287,14 +312,17 @@ function renderScanResult(data, cachedPreview) {
                             ${r.notes ? `<p class="text-xs text-secondary mb-0"><strong>Notes:</strong> ${escapeHtml(r.notes)}</p>` : ''}
                         </div>
                     `).join('')}
-                </div>
-            `;
-        } else {
-            chemicalContainer.innerHTML = `
-                <div class="p-3 bg-subtle rounded border text-muted text-xs">
-                    No synthetic chemical remedies currently registered for this diagnosis.
-                </div>
-            `;
+                `;
+            } else if (advisoryRemedies.length === 0) {
+                html += `
+                    <div class="p-3 bg-subtle rounded border text-muted text-xs">
+                        No synthetic chemical remedies currently registered for this diagnosis.
+                    </div>
+                `;
+            }
+
+            html += '</div>';
+            chemicalContainer.innerHTML = html;
         }
     }
 

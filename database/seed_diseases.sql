@@ -12,6 +12,7 @@
 -- ==============================================================================
 
 USE agrodoc_db;
+SET NAMES utf8mb4;
 
 -- Prevent duplicate inserts if script is re-run
 -- (IGNORE silently skips rows that violate the UNIQUE constraint on disease_name)
@@ -340,8 +341,8 @@ FROM disease_info WHERE disease_name = 'Tomato Mosaic Virus'
 
 INSERT IGNORE INTO disease_remedies (disease_id, remedy_type, remedy_name, application, notes, display_order)
 SELECT id, 'CHEMICAL', 'No Chemical Cure Available',
-    'There is no registered chemical treatment that cures virus-infected plants. Focus on prevention and roguing.',
-    'Consult your local agricultural extension officer for guidance on resistant varieties available in your region.',
+    'There is no registered chemical fungicide, viricide, or bactericide that cures viral plant infections. Focus on preventive sanitation, avoiding tobacco contact, and roguing (removing and destroying infected plants).',
+    'Consult your local agricultural extension officer for guidance on region-appropriate certified resistant varieties.',
     1
 FROM disease_info WHERE disease_name = 'Tomato Mosaic Virus'
   AND NOT EXISTS (
@@ -389,6 +390,12 @@ FROM disease_info WHERE disease_name = 'Tomato Yellow Leaf Curl Virus'
         AND disease_remedies.remedy_name = 'Yellow Sticky Traps'
   );
 
+-- Clean up exact corrupted mojibake duplicate if present (leaves clean record intact)
+DELETE FROM disease_remedies 
+WHERE disease_id = (SELECT id FROM disease_info WHERE disease_name = 'Tomato Yellow Leaf Curl Virus')
+  AND remedy_type = 'CHEMICAL'
+  AND remedy_name = 'Imidacloprid (Confidor) ??? Soil Drench';
+
 INSERT IGNORE INTO disease_remedies (disease_id, remedy_type, remedy_name, application, notes, display_order)
 SELECT id, 'CHEMICAL', 'Imidacloprid (Confidor) — Soil Drench',
     'Apply as soil drench at transplanting: 0.5ml per litre per plant. Provides systemic whitefly control for 4–6 weeks.',
@@ -398,7 +405,7 @@ FROM disease_info WHERE disease_name = 'Tomato Yellow Leaf Curl Virus'
   AND NOT EXISTS (
       SELECT 1 FROM disease_remedies
       WHERE disease_remedies.disease_id = disease_info.id
-        AND disease_remedies.remedy_name = 'Imidacloprid (Confidor) — Soil Drench'
+        AND disease_remedies.remedy_name LIKE 'Imidacloprid (Confidor)%'
   );
 
 -- ==============================================================================
